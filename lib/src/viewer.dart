@@ -48,7 +48,6 @@ class PDFViewer extends StatefulWidget {
   final double? panLimit;
   final ValueChanged<int>? onPageChanged;
   final Color? backgroundColor;
-  final Widget? indicator;
 
   final Widget Function(
     BuildContext,
@@ -57,7 +56,11 @@ class PDFViewer extends StatefulWidget {
     void Function({int page}) jumpToPage,
     void Function({int? page}) animateToPage,
   )? navigationBuilder;
+
   final Widget? progressIndicator;
+
+  final Widget Function(BuildContext, int? pageNumber, int? totalPages)?
+      indicatorBuilder;
 
   PDFViewer({
     Key? key,
@@ -84,7 +87,7 @@ class PDFViewer extends StatefulWidget {
     this.pickerIconColor,
     this.onPageChanged,
     this.backgroundColor,
-    this.indicator,
+    this.indicatorBuilder,
   }) : super(key: key);
 
   _PDFViewerState createState() => _PDFViewerState();
@@ -173,7 +176,9 @@ class _PDFViewerState extends State<PDFViewer> {
   }
 
   Widget _drawIndicator() {
-    if (widget.indicator != null) return widget.indicator!;
+    if (widget.indicatorBuilder != null)
+      return widget.indicatorBuilder!(
+          context, _pageNumber, widget.document.count);
 
     Widget child = GestureDetector(
       onTap: widget.showPicker && widget.document.count > 1 ? _pickPage : null,
