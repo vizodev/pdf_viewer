@@ -108,14 +108,7 @@ class _PDFViewerState extends State<PDFViewer> {
     _pages = List.filled(widget.document.count, null);
     _pageController = widget.controller ?? PageController();
     _pageNumber = _pageController.initialPage + 1;
-    if (!widget.lazyLoad)
-      widget.document.preloadPages(
-        onZoomChanged: onZoomChanged,
-        zoomSteps: widget.zoomSteps,
-        minScale: widget.minScale,
-        maxScale: widget.maxScale,
-        panLimit: widget.panLimit,
-      );
+    if (!widget.lazyLoad) _preloadPages();
   }
 
   @override
@@ -142,6 +135,23 @@ class _PDFViewerState extends State<PDFViewer> {
       setState(() {
         _swipeEnabled = true;
       });
+    }
+  }
+
+  _preloadPages() async {
+    int countvar = 1;
+    for (final _ in List.filled(widget.document.count, null)) {
+      final data = await widget.document.get(
+        page: countvar,
+        onZoomChanged: onZoomChanged,
+        zoomSteps: widget.zoomSteps,
+        minScale: widget.minScale,
+        maxScale: widget.maxScale,
+        panLimit: widget.panLimit,
+      );
+      _pages![countvar - 1] = data;
+
+      countvar++;
     }
   }
 
