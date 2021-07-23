@@ -1,5 +1,5 @@
-import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
-import 'package:advance_pdf_viewer/src/page_picker.dart';
+import 'package:pdf_viewer/pdf_viewer.dart';
+import 'package:pdf_viewer/src/page_picker.dart';
 import 'package:flutter/material.dart';
 
 /// enum to describe indicator position
