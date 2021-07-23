@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
       document = await PDFDocument.fromAsset('assets/sample2.pdf');
     } else if (value == 2) {
       document = await PDFDocument.fromURL(
-        "http://conorlastowka.com/book/CitationNeededBook-Sample.pdf",
+        "https://www.ecma-international.org/wp-content/uploads/ECMA-262_12th_edition_june_2021.pdf",
 
         /* cacheManager: CacheManager(
           Config(
@@ -83,7 +83,7 @@ class _MyAppState extends State<MyApp> {
               ? Center(child: CircularProgressIndicator())
               : PDFViewer(
                   document: document,
-                  // lazyLoad: false,
+                  lazyLoad: false,
                   zoomSteps: 1,
                   //uncomment below line to preload all pages
                   // lazyLoad: false,
