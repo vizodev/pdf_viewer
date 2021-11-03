@@ -4,14 +4,14 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'easy_pdf_viewer'
-  s.version          = '0.0.1'
-  s.summary          = 'A new flutter plugin project.'
+  s.version          = '1.0.1'
+  s.summary          = 'Allows you to generate PNG&#x27;s of specified pages from a provided PDF file source.'
   s.description      = <<-DESC
-A new flutter plugin project.
-                       DESC
-  s.homepage         = 'http://example.com'
+  Allows you to generate PNG&#x27;s of specified pages from a provided PDF file source.
+                         DESC
+  s.homepage         = 'https://github.com/kaichii/pdf_viewer'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'Kaichi' => 'chyikay@icloud.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
