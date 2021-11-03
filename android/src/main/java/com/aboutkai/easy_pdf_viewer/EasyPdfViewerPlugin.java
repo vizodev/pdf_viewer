@@ -25,7 +25,6 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /** EasyPdfViewerPlugin */
 public class EasyPdfViewerPlugin implements FlutterPlugin, MethodCallHandler {
@@ -119,7 +118,6 @@ public class EasyPdfViewerPlugin implements FlutterPlugin, MethodCallHandler {
     try {
       clearCacheDir();
       PdfRenderer renderer = new PdfRenderer(ParcelFileDescriptor.open(pdf, ParcelFileDescriptor.MODE_READ_ONLY));
-      Bitmap bitmap;
       final int pageCount = renderer.getPageCount();
       return String.format("%d", pageCount);
     } catch (Exception ex) {
