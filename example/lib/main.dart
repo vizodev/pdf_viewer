@@ -76,7 +76,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         appBar: AppBar(
-          title: const Text('FlutterPluginPDFViewer'),
+          title: const Text('PDFViewer'),
         ),
         body: Center(
           child: _isLoading

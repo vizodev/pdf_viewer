@@ -1,3 +1,5 @@
-# Changelog
+## 1.0.1
+* Support the v2 Android embedder.
+
 ## 1.0.0
-- fix lazyload  after fork
+* fix lazyload  after fork

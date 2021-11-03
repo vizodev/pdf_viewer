@@ -1,4 +1,4 @@
-library pdf_viewer;
+library easy_pdf_viewer;
 
 export 'src/document.dart' show PDFDocument;
 export 'src/page.dart' show PDFPage;

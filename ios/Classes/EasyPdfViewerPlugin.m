@@ -1,15 +1,23 @@
-#import "FlutterPluginPdfViewerPlugin.h"
+#import "EasyPdfViewerPlugin.h"
+#if __has_include(<easy_pdf_viewer/easy_pdf_viewer-Swift.h>)
+#import <easy_pdf_viewer/easy_pdf_viewer-Swift.h>
+#else
+// Support project import fallback if the generated compatibility header
+// is not copied when this plugin is created as a library.
+// https://forums.swift.org/t/swift-static-libraries-dont-copy-generated-objective-c-header/19816
+#import "easy_pdf_viewer-Swift.h"
+#endif
 
-static NSString* const kDirectory = @"FlutterPluginPdfViewer";
+static NSString* const kDirectory = @"EasyPdfViewer";
 static NSString* const kFilePath = @"file:///";
 static NSString* kFileName = @"";
 
-@implementation FlutterPluginPdfViewerPlugin
+@implementation EasyPdfViewerPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  FlutterMethodChannel* channel = [FlutterMethodChannel
-      methodChannelWithName:@"flutter_plugin_pdf_viewer"
+   FlutterMethodChannel* channel = [FlutterMethodChannel
+      methodChannelWithName:@"easy_pdf_viewer_plugin"
             binaryMessenger:[registrar messenger]];
-  FlutterPluginPdfViewerPlugin* instance = [[FlutterPluginPdfViewerPlugin alloc] init];
+  EasyPdfViewerPlugin* instance = [[EasyPdfViewerPlugin alloc] init];
   [registrar addMethodCallDelegate:instance channel:channel];
 }
 
@@ -46,7 +54,7 @@ static NSString* kFileName = @"";
 
     // Clear cache folder
     if ([[NSFileManager defaultManager] fileExistsAtPath:filePathAndDirectory]) {
-        NSLog(@"[FlutterPluginPDFViewer] Removing old documents cache");
+        NSLog(@"[EasyPdfViewerPlugin] Removing old documents cache");
         [[NSFileManager defaultManager] removeItemAtPath:filePathAndDirectory error:&error];
     }
 
@@ -61,8 +69,8 @@ static NSString* kFileName = @"";
     // Generate random file size for this document
 
     kFileName = [[NSUUID UUID] UUIDString];
-    NSLog(@"[FlutterPluginPdfViewer] File has %zd pages", numberOfPages);
-    NSLog(@"[FlutterPluginPdfViewer] File will be saved in cache as %@", kFileName);
+    NSLog(@"[EasyPdfViewerPlugin] File has %zd pages", numberOfPages);
+    NSLog(@"[EasyPdfViewerPlugin] File will be saved in cache as %@", kFileName);
     return [NSString stringWithFormat:@"%zd", numberOfPages];
 }
 
