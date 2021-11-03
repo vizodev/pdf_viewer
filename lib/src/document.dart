@@ -3,12 +3,12 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:advance_pdf_viewer/src/page.dart';
+import 'package:easy_pdf_viewer/src/page.dart';
 import 'package:path_provider/path_provider.dart';
 
 class PDFDocument {
   static const MethodChannel _channel =
-      const MethodChannel('flutter_plugin_pdf_viewer');
+      const MethodChannel('easy_pdf_viewer_plugin');
 
   String? _filePath;
   late int count;
