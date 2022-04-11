@@ -66,7 +66,7 @@ public class EasyPdfViewerPlugin implements FlutterPlugin, MethodCallHandler {
           public void run() {
             switch (call.method) {
             case "getNumberOfPages":
-              final String numResult = getNumberOfPages((String) call.argument("filePath"));
+              final String numResult = getNumberOfPages((String) call.argument("filePath"), (boolean) call.argument("clearCacheDir"));
               mainThreadHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -81,6 +81,15 @@ public class EasyPdfViewerPlugin implements FlutterPlugin, MethodCallHandler {
                 public void run() {
                   result.success(pageRes);
                 }
+              });
+              break;
+            case "clearCacheDir":
+              clearCacheDir();
+              mainThreadHandler.post(new Runnable(){
+                  @Override
+                  public void run() {
+                      result.success(null);
+                  }
               });
               break;
             default:
@@ -113,10 +122,12 @@ public class EasyPdfViewerPlugin implements FlutterPlugin, MethodCallHandler {
     }
   }
 
-  private String getNumberOfPages(String filePath) {
+private String getNumberOfPages(String filePath, boolean clearCacheDir) {
     File pdf = new File(filePath);
     try {
-      clearCacheDir();
+      if (clearCacheDir) {
+        clearCacheDir();
+      }
       PdfRenderer renderer = new PdfRenderer(ParcelFileDescriptor.open(pdf, ParcelFileDescriptor.MODE_READ_ONLY));
       final int pageCount = renderer.getPageCount();
       return String.format("%d", pageCount);
