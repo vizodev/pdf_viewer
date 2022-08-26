@@ -66,6 +66,52 @@ class PDFDocument {
     return document;
   }
 
+  /// Load a PDF File from a given URL, notifies download progress until completed
+  /// File is saved in cache
+  /// 
+  /// [String url] url of the pdf file
+  /// [Map<String,String headers] headers to pass for the [url]
+  /// [CacheManager cacheManager] to provide configuration for
+  /// cache management
+  /// Automatically clears the on-disk cache of previously rendered PDF previews
+  /// unless [clearPreviewCache] is set to `false`. The option to disable it
+  /// comes in handy when working with more than one document at the same time.
+  /// If you do this, you are responsible for eventually clearing the cache by hand
+  /// by calling [PDFDocument.clearPreviewCache].
+  /// Use [downloadProgress] to get the download progress information. NOTE that 
+  /// [downloadProgress] is not called after [onDownloadComplete].
+  /// Once the download is finished, [onDownloadComplete] is called. If the file
+  /// is already available, [onDownloadComplete] is called directly.
+  static void fromURLWithDownloadProgress(
+    String url, {
+    Map<String, String>? headers,
+    CacheManager? cacheManager,
+    bool clearPreviewCache = true,
+    required void Function(DownloadProgress downloadProgress) downloadProgress,
+    required void Function(PDFDocument document) onDownloadComplete,
+  }) {
+    StreamSubscription<FileResponse>? streamSubscription;
+    final fileResponse = (cacheManager ?? DefaultCacheManager())
+        .getFileStream(url, headers: headers, withProgress: true);
+
+    streamSubscription = fileResponse.listen(
+      (event) async {
+        if (event is DownloadProgress) {
+          downloadProgress.call(event);
+          return;
+        }
+
+        if (event is FileInfo) {
+          final pdfDocument =
+              await fromFile(event.file, clearPreviewCache: clearPreviewCache);
+          onDownloadComplete.call(pdfDocument);
+          streamSubscription?.cancel();
+          return;
+        }
+      },
+    );
+  }
+  
   /// Load a PDF File from assets folder
   /// 
   /// [String asset] path of the asset to be loaded
