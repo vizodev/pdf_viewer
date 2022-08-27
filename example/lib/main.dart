@@ -61,9 +61,9 @@ class _MyAppStateWithProgress extends State<MyApp> {
     }
 
     String progressString =
-        '${parseBytesToKBs(downloadProgress.downloaded)} KBs';
+        parseBytesToKBs(downloadProgress.downloaded);
     if (downloadProgress.totalSize != null) {
-      progressString += '/ ${parseBytesToKBs(downloadProgress.totalSize)} KBs';
+      progressString += '/ ${parseBytesToKBs(downloadProgress.totalSize)}';
     }
 
     return Column(
