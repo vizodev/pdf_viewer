@@ -1,11 +1,101 @@
 import 'package:flutter/material.dart';
 import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MyApp(
+      progressExample: true,
+    ));
 
 class MyApp extends StatefulWidget {
+  const MyApp({this.progressExample = false});
+
+  final bool progressExample;
+
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() {
+    if (progressExample) return _MyAppStateWithProgress();
+    return _MyAppState();
+  }
+}
+
+class _MyAppStateWithProgress extends State<MyApp> {
+  bool _isLoading = true;
+  PDFDocument document;
+  DownloadProgress downloadProgress;
+
+  @override
+  void initState() {
+    loadDocument();
+    super.initState();
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  void loadDocument() async {
+
+    /// Clears the cache before download, so [PDFDocument.fromURLWithDownloadProgress.downloadProgress()]
+    /// is always executed (meant only for testing).
+    await DefaultCacheManager().emptyCache();
+
+    PDFDocument.fromURLWithDownloadProgress(
+      'https://www.ecma-international.org/wp-content/uploads/ECMA-262_12th_edition_june_2021.pdf',
+      downloadProgress: (downloadProgress) => setState(() {
+        this.downloadProgress = downloadProgress;
+      }),
+      onDownloadComplete: (document) => setState(() {
+        this.document = document;
+        _isLoading = false;
+      }),
+    );
+  }
+
+  Widget buildProgress() {
+    if (downloadProgress == null) return SizedBox();
+
+    String parseBytesToKBs(int bytes) {
+      return '${(bytes / 1000).toStringAsFixed(2)} KBs';
+    }
+
+    String progressString =
+        parseBytesToKBs(downloadProgress.downloaded);
+    if (downloadProgress.totalSize != null) {
+      progressString += '/ ${parseBytesToKBs(downloadProgress.totalSize)}';
+    }
+
+    return Column(
+      children: [
+        SizedBox(height: 20),
+        Text(progressString),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: SafeArea(
+          child: _isLoading
+              ? Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CircularProgressIndicator(),
+                      buildProgress(),
+                    ],
+                  ),
+                )
+              : PDFViewer(
+                  document: document,
+                ),
+        ),
+      ),
+    );
+  }
 }
 
 class _MyAppState extends State<MyApp> {
