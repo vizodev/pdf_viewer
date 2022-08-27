@@ -11,11 +11,11 @@ Pod::Spec.new do |s|
                          DESC
   s.homepage         = 'https://github.com/kaichii/pdf_viewer'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Kaichi' => 'chyikay@icloud.com' }
+  s.author           = { 'Kaichi' => 'kaiichiiiiii@gamil.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.platform = :ios, '8.0'
+  s.platform = :ios, '9.0'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }

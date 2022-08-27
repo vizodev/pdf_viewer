@@ -1,8 +1,15 @@
+## 1.0.3
+
+- Add progress status
+
 ## 1.0.2
-* Support multiple files
+
+- Support multiple files
 
 ## 1.0.1
-* Support the v2 Android embedder.
+
+- Support the v2 Android embedder.
 
 ## 1.0.0
-* fix lazyload  after fork
+
+- fix lazyload after fork
