@@ -1,5 +1,7 @@
 package com.aboutkai.easy_pdf_viewer;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.HandlerThread;
 import android.os.Process;
 import android.os.Handler;
@@ -7,15 +9,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.pdf.PdfRenderer;
-import android.os.Environment;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.os.HandlerThread;
-import android.os.Process;
+
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
@@ -36,7 +35,6 @@ public class EasyPdfViewerPlugin implements FlutterPlugin, MethodCallHandler {
   /// when the Flutter Engine is detached from the Activity
   private MethodChannel channel;
   private FlutterPluginBinding instance;
-  private HandlerThread handlerThread;
   private Handler backgroundHandler;
   private final Object pluginLocker = new Object();
   private final String filePrefix = "FlutterEasyPdfViewerPlugin";
@@ -49,10 +47,10 @@ public class EasyPdfViewerPlugin implements FlutterPlugin, MethodCallHandler {
   }
 
   @Override
-  public void onMethodCall(final MethodCall call, final Result result) {
+  public void onMethodCall(@NonNull final MethodCall call, @NonNull final Result result) {
     synchronized (pluginLocker) {
       if (backgroundHandler == null) {
-        handlerThread = new HandlerThread("flutterEasyPdfViewer", Process.THREAD_PRIORITY_BACKGROUND);
+        HandlerThread handlerThread = new HandlerThread("flutterEasyPdfViewer", Process.THREAD_PRIORITY_BACKGROUND);
         handlerThread.start();
         backgroundHandler = new Handler(handlerThread.getLooper());
       }
@@ -62,6 +60,7 @@ public class EasyPdfViewerPlugin implements FlutterPlugin, MethodCallHandler {
 
     backgroundHandler.post(//
         new Runnable() {
+          @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
           @Override
           public void run() {
             switch (call.method) {
@@ -100,7 +99,7 @@ public class EasyPdfViewerPlugin implements FlutterPlugin, MethodCallHandler {
         });
   }
 
-  private boolean clearCacheDir() {
+  private void clearCacheDir() {
     try {
       File directory = instance.getApplicationContext().getCacheDir();
       FilenameFilter myFilter = new FilenameFilter() {
@@ -111,17 +110,18 @@ public class EasyPdfViewerPlugin implements FlutterPlugin, MethodCallHandler {
       };
       File[] files = directory.listFiles(myFilter);
       // Log.d("Cache Files", "Size: " + files.length);
-      for (int i = 0; i < files.length; i++) {
+      assert files != null;
+      for (File file : files) {
         // Log.d("Files", "FileName: " + files[i].getName());
-        files[i].delete();
+        file.delete();
       }
-      return true;
     } catch (Exception ex) {
       ex.printStackTrace();
-      return false;
     }
   }
 
+@SuppressLint("DefaultLocale")
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 private String getNumberOfPages(String filePath, boolean clearCacheDir) {
     File pdf = new File(filePath);
     try {
@@ -147,7 +147,7 @@ private String getNumberOfPages(String filePath, boolean clearCacheDir) {
     String fileNameOnly = getFileNameFromPath(name);
     File file;
     try {
-      String fileName = String.format("%s-%d.png", fileNameOnly, page);
+      @SuppressLint("DefaultLocale") String fileName = String.format("%s-%d.png", fileNameOnly, page);
       file = File.createTempFile(fileName, null, instance.getApplicationContext().getCacheDir());
       FileOutputStream out = new FileOutputStream(file);
       bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
@@ -160,6 +160,7 @@ private String getNumberOfPages(String filePath, boolean clearCacheDir) {
     return file.getAbsolutePath();
   }
 
+  @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
   private String getPage(String filePath, int pageNumber) {
     File pdf = new File(filePath);
 
