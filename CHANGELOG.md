@@ -1,3 +1,7 @@
+## 1.0.4
+
+- Fix deprecated API
+
 ## 1.0.3
 
 - Add progress status
