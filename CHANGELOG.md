@@ -1,3 +1,7 @@
+## 1.0.5
+
+- Fix Missing Parameter
+
 ## 1.0.4
 
 - Fix deprecated API
