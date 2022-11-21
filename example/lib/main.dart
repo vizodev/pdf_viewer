@@ -36,13 +36,12 @@ class _MyAppStateWithProgress extends State<MyApp> {
   }
 
   void loadDocument() async {
-
     /// Clears the cache before download, so [PDFDocument.fromURLWithDownloadProgress.downloadProgress()]
     /// is always executed (meant only for testing).
     await DefaultCacheManager().emptyCache();
 
     PDFDocument.fromURLWithDownloadProgress(
-      'https://www.ecma-international.org/wp-content/uploads/ECMA-262_12th_edition_june_2021.pdf',
+      'https://www.africau.edu/images/default/sample.pdf',
       downloadProgress: (downloadProgress) => setState(() {
         this.downloadProgress = downloadProgress;
       }),
@@ -60,8 +59,7 @@ class _MyAppStateWithProgress extends State<MyApp> {
       return '${(bytes / 1000).toStringAsFixed(2)} KBs';
     }
 
-    String progressString =
-        parseBytesToKBs(downloadProgress.downloaded);
+    String progressString = parseBytesToKBs(downloadProgress.downloaded);
     if (downloadProgress.totalSize != null) {
       progressString += '/ ${parseBytesToKBs(downloadProgress.totalSize)}';
     }
@@ -91,6 +89,9 @@ class _MyAppStateWithProgress extends State<MyApp> {
                 )
               : PDFViewer(
                   document: document,
+                  numberPickerConfirmWidget: const Text(
+                    "Confirm",
+                  ),
                 ),
         ),
       ),
@@ -120,7 +121,7 @@ class _MyAppState extends State<MyApp> {
       document = await PDFDocument.fromAsset('assets/sample2.pdf');
     } else if (value == 2) {
       document = await PDFDocument.fromURL(
-        "https://www.ecma-international.org/wp-content/uploads/ECMA-262_12th_edition_june_2021.pdf",
+        "https://www.africau.edu/images/default/sample.pdf",
 
         /* cacheManager: CacheManager(
           Config(

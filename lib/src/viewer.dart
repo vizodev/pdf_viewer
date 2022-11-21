@@ -231,6 +231,7 @@ class _PDFViewerState extends State<PDFViewer> {
             title: widget.tooltip.pick,
             maxValue: widget.document.count,
             initialValue: _pageNumber,
+            numberPickerConfirmWidget: widget.numberPickerConfirmWidget,
           );
         }).then((int? value) {
       if (value != null) {
