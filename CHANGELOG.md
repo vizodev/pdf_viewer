@@ -1,6 +1,6 @@
 ## 1.0.5
 
-- Fix Missing Parameter
+- Fix missing parameter
 
 ## 1.0.4
 
