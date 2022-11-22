@@ -50,25 +50,26 @@ class _PDFPageState extends State<PDFPage> {
     }
   }
 
-  _repaint() {
+  void _repaint() {
     provider = FileImage(File(widget.imgPath!));
     final resolver = provider.resolve(createLocalImageConfiguration(context));
     resolver.addListener(ImageStreamListener((imgInfo, alreadyPainted) {
-      if (!alreadyPainted) setState(() {});
+      if (mounted && !alreadyPainted) setState(() {});
     }));
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: null,
-        child: ZoomableWidget(
-          onZoomChanged: widget.onZoomChanged,
-          zoomSteps: widget.zoomSteps,
-          minScale: widget.minScale,
-          panLimit: widget.panLimit,
-          maxScale: widget.maxScale,
-          child: Image(image: provider),
-        ));
+      decoration: null,
+      child: ZoomableWidget(
+        onZoomChanged: widget.onZoomChanged,
+        zoomSteps: widget.zoomSteps,
+        minScale: widget.minScale,
+        panLimit: widget.panLimit,
+        maxScale: widget.maxScale,
+        child: Image(image: provider),
+      ),
+    );
   }
 }

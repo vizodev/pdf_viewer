@@ -1,9 +1,19 @@
+import 'package:easy_pdf_viewer_example/with_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 
-void main() => runApp(MyApp(
-      progressExample: true,
-    ));
+void main() => runApp(App());
+
+class App extends StatelessWidget {
+  const App({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: MyApp(),
+    );
+  }
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({this.progressExample = false});
@@ -11,92 +21,7 @@ class MyApp extends StatefulWidget {
   final bool progressExample;
 
   @override
-  State<MyApp> createState() {
-    if (progressExample) return _MyAppStateWithProgress();
-    return _MyAppState();
-  }
-}
-
-class _MyAppStateWithProgress extends State<MyApp> {
-  bool _isLoading = true;
-  PDFDocument document;
-  DownloadProgress downloadProgress;
-
-  @override
-  void initState() {
-    loadDocument();
-    super.initState();
-  }
-
-  @override
-  void setState(VoidCallback fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
-  }
-
-  void loadDocument() async {
-    /// Clears the cache before download, so [PDFDocument.fromURLWithDownloadProgress.downloadProgress()]
-    /// is always executed (meant only for testing).
-    await DefaultCacheManager().emptyCache();
-
-    PDFDocument.fromURLWithDownloadProgress(
-      'https://www.africau.edu/images/default/sample.pdf',
-      downloadProgress: (downloadProgress) => setState(() {
-        this.downloadProgress = downloadProgress;
-      }),
-      onDownloadComplete: (document) => setState(() {
-        this.document = document;
-        _isLoading = false;
-      }),
-    );
-  }
-
-  Widget buildProgress() {
-    if (downloadProgress == null) return SizedBox();
-
-    String parseBytesToKBs(int bytes) {
-      return '${(bytes / 1000).toStringAsFixed(2)} KBs';
-    }
-
-    String progressString = parseBytesToKBs(downloadProgress.downloaded);
-    if (downloadProgress.totalSize != null) {
-      progressString += '/ ${parseBytesToKBs(downloadProgress.totalSize)}';
-    }
-
-    return Column(
-      children: [
-        SizedBox(height: 20),
-        Text(progressString),
-      ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: SafeArea(
-          child: _isLoading
-              ? Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CircularProgressIndicator(),
-                      buildProgress(),
-                    ],
-                  ),
-                )
-              : PDFViewer(
-                  document: document,
-                  numberPickerConfirmWidget: const Text(
-                    "Confirm",
-                  ),
-                ),
-        ),
-      ),
-    );
-  }
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -139,50 +64,63 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        drawer: Drawer(
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 36),
-              ListTile(
-                title: Text('Load from Assets'),
-                onTap: () {
-                  changePDF(1);
-                },
-              ),
-              ListTile(
-                title: Text('Load from URL'),
-                onTap: () {
-                  changePDF(2);
-                },
-              ),
-              ListTile(
-                title: Text('Restore default'),
-                onTap: () {
-                  changePDF(3);
-                },
-              ),
-            ],
-          ),
+    return Scaffold(
+      drawer: Drawer(
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 36),
+            ListTile(
+              title: Text('Load from Assets'),
+              onTap: () {
+                changePDF(1);
+              },
+            ),
+            ListTile(
+              title: Text('Load from URL'),
+              onTap: () {
+                changePDF(2);
+              },
+            ),
+            ListTile(
+              title: Text('Restore default'),
+              onTap: () {
+                changePDF(3);
+              },
+            ),
+            ListTile(
+              title: Text('With Progress'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WithProgress(),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
-        appBar: AppBar(
-          title: const Text('PDFViewer'),
-        ),
-        body: Center(
-          child: _isLoading
-              ? Center(child: CircularProgressIndicator())
-              : PDFViewer(
-                  document: document,
-                  lazyLoad: false,
-                  zoomSteps: 1,
-                  //uncomment below line to preload all pages
-                  // lazyLoad: false,
-                  // uncomment below line to scroll vertically
-                  // scrollDirection: Axis.vertical,
+      ),
+      appBar: AppBar(
+        title: const Text('PDFViewer'),
+      ),
+      body: Center(
+        child: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : PDFViewer(
+                document: document,
+                lazyLoad: false,
+                zoomSteps: 1,
+                numberPickerConfirmWidget: const Text(
+                  "Confirm",
+                ),
+                //uncomment below line to preload all pages
+                // lazyLoad: false,
+                // uncomment below line to scroll vertically
+                // scrollDirection: Axis.vertical,
 
-                  //uncomment below code to replace bottom navigation with your own
-                  /* navigationBuilder:
+                //uncomment below code to replace bottom navigation with your own
+                /* navigationBuilder:
                       (context, page, totalPages, jumpToPage, animateToPage) {
                     return ButtonBar(
                       alignment: MainAxisAlignment.spaceEvenly,
@@ -214,8 +152,7 @@ class _MyAppState extends State<MyApp> {
                       ],
                     );
                   }, */
-                ),
-        ),
+              ),
       ),
     );
   }
