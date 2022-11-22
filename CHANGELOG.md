@@ -1,3 +1,7 @@
+## 1.0.6
+
+- Fix setState being called wrong
+
 ## 1.0.5
 
 - Fix missing parameter
