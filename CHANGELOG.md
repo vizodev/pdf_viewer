@@ -1,3 +1,8 @@
+## 1.0.7
+
+- Upgrade some deps
+- Modify example code
+
 ## 1.0.6
 
 - Fix setState being called wrong
