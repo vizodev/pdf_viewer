@@ -1,5 +1,5 @@
-group 'com.aboutkai.easy_pdf_viewer'
-version '1.0.1'
+group 'dev.kaichi.easy_pdf_viewer'
+version '1.0.7'
 
 buildscript {
     repositories {

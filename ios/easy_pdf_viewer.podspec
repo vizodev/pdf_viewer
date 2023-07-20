@@ -4,14 +4,14 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'easy_pdf_viewer'
-  s.version          = '1.0.1'
+  s.version          = '1.0.7'
   s.summary          = 'Allows you to generate PNG&#x27;s of specified pages from a provided PDF file source.'
   s.description      = <<-DESC
   Allows you to generate PNG&#x27;s of specified pages from a provided PDF file source.
                          DESC
   s.homepage         = 'https://github.com/kaichii/pdf_viewer'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Kaichi' => 'kaiichiiiiii@gamil.com' }
+  s.author           = { 'Kaichi' => 'contact@kaichi.dev' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'

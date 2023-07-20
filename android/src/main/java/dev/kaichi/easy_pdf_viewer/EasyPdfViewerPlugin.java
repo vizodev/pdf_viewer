@@ -1,4 +1,4 @@
-package com.aboutkai.easy_pdf_viewer;
+package dev.kaichi.easy_pdf_viewer;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
@@ -10,7 +10,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.pdf.PdfRenderer;
 import android.os.ParcelFileDescriptor;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -64,36 +63,37 @@ public class EasyPdfViewerPlugin implements FlutterPlugin, MethodCallHandler {
           @Override
           public void run() {
             switch (call.method) {
-            case "getNumberOfPages":
-              final String numResult = getNumberOfPages((String) call.argument("filePath"), (boolean) call.argument("clearCacheDir"));
-              mainThreadHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                  result.success(numResult);
-                }
-              });
-              break;
-            case "getPage":
-              final String pageRes = getPage((String) call.argument("filePath"), (int) call.argument("pageNumber"));
-              mainThreadHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                  result.success(pageRes);
-                }
-              });
-              break;
-            case "clearCacheDir":
-              clearCacheDir();
-              mainThreadHandler.post(new Runnable(){
+              case "getNumberOfPages":
+                final String numResult = getNumberOfPages((String) call.argument("filePath"),
+                    (boolean) call.argument("clearCacheDir"));
+                mainThreadHandler.post(new Runnable() {
                   @Override
                   public void run() {
-                      result.success(null);
+                    result.success(numResult);
                   }
-              });
-              break;
-            default:
-              result.notImplemented();
-              break;
+                });
+                break;
+              case "getPage":
+                final String pageRes = getPage((String) call.argument("filePath"), (int) call.argument("pageNumber"));
+                mainThreadHandler.post(new Runnable() {
+                  @Override
+                  public void run() {
+                    result.success(pageRes);
+                  }
+                });
+                break;
+              case "clearCacheDir":
+                clearCacheDir();
+                mainThreadHandler.post(new Runnable() {
+                  @Override
+                  public void run() {
+                    result.success(null);
+                  }
+                });
+                break;
+              default:
+                result.notImplemented();
+                break;
             }
           }
         });
@@ -120,9 +120,9 @@ public class EasyPdfViewerPlugin implements FlutterPlugin, MethodCallHandler {
     }
   }
 
-@SuppressLint("DefaultLocale")
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-private String getNumberOfPages(String filePath, boolean clearCacheDir) {
+  @SuppressLint("DefaultLocale")
+  @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+  private String getNumberOfPages(String filePath, boolean clearCacheDir) {
     File pdf = new File(filePath);
     try {
       if (clearCacheDir) {
@@ -147,7 +147,8 @@ private String getNumberOfPages(String filePath, boolean clearCacheDir) {
     String fileNameOnly = getFileNameFromPath(name);
     File file;
     try {
-      @SuppressLint("DefaultLocale") String fileName = String.format("%s-%d.png", fileNameOnly, page);
+      @SuppressLint("DefaultLocale")
+      String fileName = String.format("%s-%d.png", fileNameOnly, page);
       file = File.createTempFile(fileName, null, instance.getApplicationContext().getCacheDir());
       FileOutputStream out = new FileOutputStream(file);
       bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
@@ -175,7 +176,7 @@ private String getNumberOfPages(String filePath, boolean clearCacheDir) {
       double width = page.getWidth();
       double height = page.getHeight();
       final double docRatio = width / height;
-      
+
       width = 2048;
       height = (int) (width / docRatio);
 

@@ -5,7 +5,7 @@ import 'package:easy_pdf_viewer/easy_pdf_viewer.dart';
 void main() => runApp(App());
 
 class App extends StatelessWidget {
-  const App({Key key}) : super(key: key);
+  const App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool _isLoading = true;
-  PDFDocument document;
+  late PDFDocument document;
 
   @override
   void initState() {
