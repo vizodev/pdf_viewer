@@ -48,6 +48,7 @@ class PDFViewer extends StatefulWidget {
   final double? panLimit;
   final ValueChanged<int>? onPageChanged;
   final Color? backgroundColor;
+  final Function(double)? onZoomChanged;
 
   final Widget Function(
     BuildContext,
@@ -88,6 +89,7 @@ class PDFViewer extends StatefulWidget {
     this.onPageChanged,
     this.backgroundColor,
     this.indicatorBuilder,
+    this.onZoomChanged,
   }) : super(key: key);
 
   _PDFViewerState createState() => _PDFViewerState();
@@ -127,6 +129,8 @@ class _PDFViewerState extends State<PDFViewer> {
   }
 
   onZoomChanged(double scale) {
+    widget.onZoomChanged?.call(scale);
+
     if (scale != 1.0) {
       setState(() {
         _swipeEnabled = false;
