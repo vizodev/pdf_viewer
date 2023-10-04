@@ -1,3 +1,7 @@
+## 1.0.8
+
+- Add param onZoomChanged to PDFViewer
+
 ## 1.0.7
 
 - Upgrade some deps
