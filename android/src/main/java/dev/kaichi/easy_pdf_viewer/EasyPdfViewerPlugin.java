@@ -129,8 +129,12 @@ public class EasyPdfViewerPlugin implements FlutterPlugin, MethodCallHandler {
         clearCacheDir();
       }
       PdfRenderer renderer = new PdfRenderer(ParcelFileDescriptor.open(pdf, ParcelFileDescriptor.MODE_READ_ONLY));
-      final int pageCount = renderer.getPageCount();
-      return String.format("%d", pageCount);
+      try {
+        final int pageCount = renderer.getPageCount();
+        return String.format("%d", pageCount);
+      } finally {
+        renderer.close();
+      }
     } catch (Exception ex) {
       ex.printStackTrace();
     }
