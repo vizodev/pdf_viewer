@@ -49,6 +49,7 @@ class PDFViewer extends StatefulWidget {
   final ValueChanged<int>? onPageChanged;
   final Color? backgroundColor;
   final Function(double)? onZoomChanged;
+  final bool? resizeToAvoidBottomInset;
 
   final Widget Function(
     BuildContext,
@@ -90,6 +91,7 @@ class PDFViewer extends StatefulWidget {
     this.backgroundColor,
     this.indicatorBuilder,
     this.onZoomChanged,
+    this.resizeToAvoidBottomInset = true,
   }) : super(key: key);
 
   _PDFViewerState createState() => _PDFViewerState();
@@ -248,6 +250,7 @@ class _PDFViewerState extends State<PDFViewer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
       backgroundColor: widget.backgroundColor,
       body: Stack(
         children: <Widget>[
